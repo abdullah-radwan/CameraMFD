@@ -18,7 +18,6 @@ public:
 	bool Update (oapi::Sketchpad *skp);
 
 private:
-	static char  buffer[256];         ///< Generic text manipulation buffer
 	static double x, y, z, dz;
 	static int fov;
 

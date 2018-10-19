@@ -35,7 +35,6 @@ DLLCLBK void ExitModule (HINSTANCE hDLL)
 // MFD class implementation
 
 // --- Class Statics ---
-char CameraMFD::buffer[256] = ""; // Initialize static buffer
 double CameraMFD::x, CameraMFD::y, CameraMFD::z = 0;
 double CameraMFD::dz = -1;
 int CameraMFD::fov = 40;
@@ -94,7 +93,7 @@ CameraMFD::~CameraMFD ()
 char *CameraMFD::ButtonLabel (int bt)
 {
 	// The labels for the buttons used by our MFD mode
-	static char *label[] = { "RIT", "LFT", "FWD", "BCK", "UP", "DWN", "VW+", "VW-", "DIR", "RST"};
+	static char *label[] = { "RHT", "LFT", "FWD", "BCK", "UP", "DWN", "VW+", "VW-", "DIR", "RST"};
 	return (bt < ARRAYSIZE(label)) ? label[bt] : NULL;
 }
 
@@ -124,12 +123,12 @@ bool  CameraMFD::ConsumeButton (int bt, int event)
 	if (event & PANEL_MOUSE_LBDOWN)
 	{
 		static const DWORD btkey[] = {
-			OAPI_KEY_R, OAPI_KEY_L, // X
-			OAPI_KEY_F, OAPI_KEY_B, // Y
-			OAPI_KEY_U, OAPI_KEY_D, // Z
-			OAPI_KEY_Z, OAPI_KEY_X,  // FoV
-			OAPI_KEY_I, // Direction
-			OAPI_KEY_S // Reset
+			OAPI_KEY_R, OAPI_KEY_L, // Right and left
+			OAPI_KEY_F, OAPI_KEY_B, // Forward and backward
+			OAPI_KEY_U, OAPI_KEY_D, // Up and down
+			OAPI_KEY_Z, OAPI_KEY_X, // Field of view
+			OAPI_KEY_I,				// Direction
+			OAPI_KEY_S				// Reset
 		};
 		if (bt < ARRAYSIZE(btkey) && btkey[bt] != NULL) {
 			return ConsumeKeyBuffered(btkey[bt]);
@@ -211,7 +210,7 @@ bool CameraMFD::Update (oapi::Sketchpad *skp)
 		Sketchpad2 *skp2 = (Sketchpad2 *)skp;
 
 		// Blit the camera view into the sketchpad.
-		RECT sr = { 0, 0, LONG(W), LONG(H) };
+		RECT sr = { 0, 0, W, H };
 		skp2->CopyRect(hRenderSrf, &sr, 0, 0);
 
 	}
