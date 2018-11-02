@@ -50,7 +50,7 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_UK
 
 STRINGTABLE
 BEGIN
-    1000                    "Camera MFD.\r\n\r\nCameraMFD is an MFD that sets a camera on the focus vessel, using D3D9 client."
+    1000                    "Camera MFD v1.0.1\r\n\r\nCameraMFD is an MFD that sets a camera on any vessel, using D3D9 client.\r\n\r\nCopyright © Abdullah Radwan"
     1001                    "MFD modes"
 END
 
