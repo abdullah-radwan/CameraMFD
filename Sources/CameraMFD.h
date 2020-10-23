@@ -1,7 +1,6 @@
 #pragma once
 #include "CameraMFD_API.h"
-
-#include <gcAPI.h>
+#include "OGCI.h"
 
 #include <vector>
 #include <map>

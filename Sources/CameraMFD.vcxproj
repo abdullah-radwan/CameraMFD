@@ -12,11 +12,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CameraMFD.cpp" />
+    <ClCompile Include="OGCI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraMFD.h" />
     <ClInclude Include="CameraMFD_API.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="OGCI.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="CameraMFD.rc" />
@@ -68,7 +70,7 @@
     </ClCompile>
     <Link>
       <OutputFile>$(TargetPath)</OutputFile>
-      <AdditionalDependencies>orbiter.lib;orbitersdk.lib;gcAPI.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>orbiter.lib;orbitersdk.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>MSVCRT;LIBCMT</IgnoreSpecificDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
@@ -79,7 +81,7 @@
     </ClCompile>
     <Link>
       <OutputFile>$(TargetPath)</OutputFile>
-      <AdditionalDependencies>orbiter.lib;orbitersdk.lib;gcAPI.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>orbiter.lib;orbitersdk.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>LIBCMT</IgnoreSpecificDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>

@@ -2,8 +2,6 @@
 
 #include "CameraMFD.h"
 
-#include <Sketchpad2.h>
-
 #include <sstream>
 
 
@@ -128,10 +126,10 @@ Camera_MFD::Camera_MFD(DWORD w, DWORD h, VESSEL *vessel, UINT mfd) : MFD2(w, h, 
 
 	font = oapiCreateFont(w / 20, true, "Sans", FONT_NORMAL);
 
-	if (gcInitialize())
+	if (ogciInitialize())
 	{
 		// Create 3D render target
-		hRenderSrf = oapiCreateSurfaceEx(W, H, OAPISURFACE_TEXTURE  | OAPISURFACE_RENDERTARGET |
+		hRenderSrf = ogciCreateSurfaceEx(W, H, OAPISURFACE_TEXTURE  | OAPISURFACE_RENDERTARGET |
 		                                       OAPISURFACE_RENDER3D | OAPISURFACE_NOMIPMAPS);
 		// Clear the surface
 		oapiClearSurface(hRenderSrf);
@@ -149,7 +147,7 @@ Camera_MFD::~Camera_MFD()
 	oapiReleaseFont(font);
 
 	if (hCamera)
-		gcDeleteCustomCamera(hCamera);
+		ogciDeleteCustomCamera(hCamera);
 
 	if (hRenderSrf)
 		oapiDestroySurface(hRenderSrf);
@@ -317,7 +315,7 @@ void Camera_MFD::readConfig(std::string fileName)
 	configFile += ".cfg";
 
 	// Open the file
-	FILEHANDLE configHandle = oapiOpenFile(configFile.c_str(), FILE_IN_ZEROONFAIL, CONFIG);
+	FILEHANDLE configHandle = oapiOpenFile(configFile.c_str(), FILE_IN, CONFIG);
 
 	if (!configHandle)
 		return;
@@ -326,7 +324,7 @@ void Camera_MFD::readConfig(std::string fileName)
 
 	ReadStatus(configHandle);
 
-	oapiCloseFile(configHandle, FILE_IN_ZEROONFAIL);
+	oapiCloseFile(configHandle, FILE_IN);
 }
 
 void Camera_MFD::setButtons()
@@ -526,14 +524,10 @@ bool Camera_MFD::Update(oapi::Sketchpad *skp)
 	// Helper for static texts
 	auto SKPTEXT = [skp](int x, int y, const char* str) { skp->Text(x, y, str, strlen(str)); };
 
-	if (hRenderSrf && gcSketchpadVersion(skp) == 2) 
-	{
-		Sketchpad2 *skp2 = static_cast<Sketchpad2*>(skp);
-
-		// Blit the camera view into the sketchpad.
-		RECT sr = { 0, 0, LONG(W), LONG(H) };
-		skp2->CopyRect(hRenderSrf, &sr, 0, 0);
-	}
+	if (hRenderSrf && ogciSketchpadVersion(skp) == SKETCHPAD_DIRECTX)
+		ogciSketchBlt(skp, hRenderSrf, 0, 0);
+	else if (hRenderSrf)
+		ogciRequestDXSketchpad(skp);
 
 	Title(skp, "Camera MFD");
 
@@ -627,10 +621,10 @@ bool Camera_MFD::Update(oapi::Sketchpad *skp)
 	if (!hCamera)
 		SKPTEXT(W / 2, H / 2, "Custom Camera Interface Disabled");
 
-	else if (!gcEnabled())
+	else if (!ogciEnabled())
 		SKPTEXT(W / 2, H / 2, "No Graphics Client");
 
-	else if (gcSketchpadVersion(skp) != 2)
+	else if (ogciSketchpadVersion(skp) != 2)
 		SKPTEXT(W / 2, H / 2, "Sketchpad Not in DirectX mode");
 
 	return true;
@@ -1246,5 +1240,5 @@ void Camera_MFD::setCustomCamera()
 	VECTOR3 dir = mul(camData.dir, _V(0, 0, 1)); normalise(dir);
 	VECTOR3 rot = mul(camData.dir, _V(0, 1, 0)); normalise(rot);
 
-	hCamera = gcSetupCustomCamera(hCamera, data->hVessel, camData.pos + camData.userPos, dir, rot, (camData.fov + camData.userFOV) * RAD, hRenderSrf, 0xFF);
+	hCamera = ogciSetupCustomCamera(hCamera, data->hVessel, camData.pos + camData.userPos, dir, rot, (camData.fov + camData.userFOV) * RAD, hRenderSrf, 0xFF);
 }
