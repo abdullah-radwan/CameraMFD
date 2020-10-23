@@ -1,10 +1,8 @@
 # Camera MFD
-Camera MFD is an MFD that sets a custom camera on the focus vessel and allows you to set the camera coordinates and direction.
-
-Note: The axes vary from vessel to another, so the buttons may look reversed.
+Camera MFD sets cameras on Orbiter vessels which can be fully control.
 
 ## Installation
-Go to releases and download the latest release. Unzip the file directly into Orbiter installation.
+Go to releases and download the latest release. Unzip the file directly into the Orbiter folder.
 
 ## Build
 Download the source into a folder in Orbitersdk/samples, then retarget the solution to your Windows SDK and build normally.
@@ -12,8 +10,8 @@ Download the source into a folder in Orbitersdk/samples, then retarget the solut
 The compiled version should appear in Modules/Plugin folder.
 
 ## About
-The MFD is based on Orbiter 2016 API, D3D9 client, Visual Studio 2017 and C++. Any suggestions, bugs and contributes are welcomed.
+Special thanks to [Face](https://www.orbiter-forum.com/members/face.267/) for the camera control logic, and [Gattispilot](https://www.orbiter-forum.com/members/gattispilot.29/) for testing the MFD.
 
-Should you have any inquiries, don't hesitate to contact me on [abbodmar@gmail.com](mailto:abbodmar@gmail.com?subject=Camera%20MFD).
+Any suggestions, bugs and contributes are welcomed.
 
 Copyright © Abdullah Radwan

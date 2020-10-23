@@ -32,16 +32,6 @@ END
 
 #endif    // APSTUDIO_INVOKED
 
-#endif    // English (United States) resources
-/////////////////////////////////////////////////////////////////////////////
-
-
-/////////////////////////////////////////////////////////////////////////////
-// English (United Kingdom) resources
-
-#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENG)
-LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_UK
-#pragma code_page(1252)
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -50,11 +40,11 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_UK
 
 STRINGTABLE
 BEGIN
-    1000                    "Camera MFD v1.0.1\r\n\r\nCameraMFD is an MFD that sets a camera on any vessel, using D3D9 client.\r\n\r\nCopyright © Abdullah Radwan"
+    1000                    "Camera MFD v2.0 Alpha 1\r\n\r\nCamera MFD sets cameras on Orbiter vessels which can be fully control.\r\n\r\nCopyright © Abdullah Radwan"
     1001                    "MFD modes"
 END
 
-#endif    // English (United Kingdom) resources
+#endif    // English (United States) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
