@@ -1,3 +1,24 @@
+// =======================================================================================
+// CameraMFD_API.h : Defines the Camera MFD 2.0 public API.
+// Copyright © 2020 Abdullah Radwan. All rights reserved.
+//
+// This file is part of Camera MFD.
+//
+// Camera MFD is free software : you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Camera MFD is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Camera MFD. If not, see <https://www.gnu.org/licenses/>.
+//
+// =======================================================================================
+
 #pragma once
 #include <Orbitersdk.h>
 
@@ -73,7 +94,7 @@ public:
 	virtual bool SetCameraData(int camera, CameraData cameraData) = 0;
 
 	// Adds a new camera with the default view.
-	// The default view position, pitch angle, and yaw angle are zeros. The default FOV is 40 degrees.
+	// The default view position, pitch angle, yaw angle, and rotation angle are zeros. The default FOV is 40 degrees.
 	// Parameters:
 	//	camera: the camera number.
 	// Returns true if the camera was added, false if the passed number already exists.
