@@ -10,7 +10,7 @@ Download the source into a folder in Orbitersdk/samples, then retarget the solut
 The compiled version should appear in Modules/Plugin folder.
 
 ## About
-Special thanks to [Face](https://www.orbiter-forum.com/members/face.267/) for the camera control logic, and [Gattispilot](https://www.orbiter-forum.com/members/gattispilot.29/) for testing the MFD.
+Special thanks to [Face](https://www.orbiter-forum.com/members/face.267/) for the camera control logic, and [Gattispilot](https://www.orbiter-forum.com/members/gattispilot.29/) and [BenSisko](https://www.orbiter-forum.com/members/bensisko.191/) for testing the MFD.
 
 Any suggestions, bugs and contributes are welcomed.
 

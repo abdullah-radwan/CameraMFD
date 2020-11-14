@@ -1,3 +1,24 @@
+// =======================================================================================
+// CameraMFD.cpp : The class of the Camera MFD.
+// Copyright © 2020 Abdullah Radwan. All rights reserved.
+//
+// This file is part of Camera MFD.
+//
+// Camera MFD is free software : you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Camera MFD is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Camera MFD. If not, see <https://www.gnu.org/licenses/>.
+//
+// =======================================================================================
+
 #define ORBITER_MODULE
 
 #include "CameraMFD.h"
@@ -48,7 +69,7 @@ DLLCLBK void opcDeleteVessel(OBJHANDLE hVessel)
 DLLCLBK void opcCloseRenderViewport()
 {
 	// Delete all data
-	for (const auto& data : mfdData)
+	for (const auto &data : mfdData)
 		delete data;
 
 	// Clear the list
@@ -93,7 +114,7 @@ Camera_MFD::Camera_MFD(DWORD w, DWORD h, VESSEL *vessel, UINT mfd) : MFD2(w, h, 
 	bool found = false;
 
 	// Search for any data saved for this MFD
-	for (const auto& data : mfdData) 
+	for (const auto &data : mfdData) 
 	{
 		if (data->hVessel == vessel->GetHandle() && data->mfdIndex == mfdIndex)
 		{
@@ -278,30 +299,30 @@ void Camera_MFD::WriteStatus(FILEHANDLE scn) const
 	oapiWriteScenario_int(scn, "CINF", data->camInfo);
 	oapiWriteScenario_string(scn, "", "");
 
-	for (auto& [cam, camData] : data->camMap)
+	for (auto &camData : data->camMap)
 	{
-		oapiWriteScenario_int(scn, "CCAM", cam);
+		oapiWriteScenario_int(scn, "CCAM", camData.first);
 
 		if (!vesselControlled)
-			oapiWriteScenario_string(scn, "CLBL", _strdup(camData.label.c_str()));
+			oapiWriteScenario_string(scn, "CLBL", _strdup(camData.second.label.c_str()));
 
 		if (configLoaded)
 		{
-			oapiWriteScenario_vec(scn, "CPOS", camData.pos);
-			oapiWriteScenario_float(scn, "CPIT", camData.pitchAngle);
-			oapiWriteScenario_float(scn, "CYAW", camData.yawAngle);
-			oapiWriteScenario_float(scn, "CROT", camData.rotAngle);
+			oapiWriteScenario_vec(scn, "CPOS", camData.second.pos);
+			oapiWriteScenario_float(scn, "CPIT", camData.second.pitchAngle);
+			oapiWriteScenario_float(scn, "CYAW", camData.second.yawAngle);
+			oapiWriteScenario_float(scn, "CROT", camData.second.rotAngle);
 		}
 
-		oapiWriteScenario_vec(scn, "CUPOS", camData.userPos);
-		oapiWriteScenario_float(scn, "CUPIT", camData.userPitch);
-		oapiWriteScenario_float(scn, "CUYAW", camData.userYaw);
-		oapiWriteScenario_float(scn, "CUROT", camData.userRot);
+		oapiWriteScenario_vec(scn, "CUPOS", camData.second.userPos);
+		oapiWriteScenario_float(scn, "CUPIT", camData.second.userPitch);
+		oapiWriteScenario_float(scn, "CUYAW", camData.second.userYaw);
+		oapiWriteScenario_float(scn, "CUROT", camData.second.userRot);
 
 		if (vesselControlled)
-			oapiWriteScenario_float(scn, "CUFOV", camData.userFOV);
+			oapiWriteScenario_float(scn, "CUFOV", camData.second.userFOV);
 		else
-			oapiWriteScenario_float(scn, "CFOV", camData.fov);
+			oapiWriteScenario_float(scn, "CFOV", camData.second.fov);
 
 		oapiWriteScenario_string(scn, "", "");
 	}
@@ -335,7 +356,7 @@ void Camera_MFD::setButtons()
 	buttons.clear();
 	buttonsMenu.clear();
 
-	auto& camData = data->camMap.at(data->cam);
+	auto &camData = data->camMap.at(data->cam);
 
 	switch (data->adj)
 	{
@@ -544,7 +565,7 @@ bool Camera_MFD::Update(oapi::Sketchpad *skp)
 	// Set the text color to green
 	skp->SetTextColor(0x00FF00);
 
-	auto& camData = data->camMap.at(data->cam);
+	auto &camData = data->camMap.at(data->cam);
 
 	switch (data->camInfo)
 	{
@@ -584,7 +605,6 @@ bool Camera_MFD::Update(oapi::Sketchpad *skp)
 			break;
 		}
 	}
-	[[fallthrough]];
 	case INFO_MIN:
 		skp->SetTextAlign(oapi::Sketchpad::RIGHT, oapi::Sketchpad::TOP);
 		SKPTEXT(W - 5, 0, camData.label.c_str());
@@ -733,7 +753,7 @@ bool Camera_MFD::ConsumeKeyBuffered(DWORD key)
 		if (data->page == 1)
 			return false;
 
-		auto& camData = data->camMap.at(data->cam);
+		auto &camData = data->camMap.at(data->cam);
 
 		if (camData.userFOV + camData.fov <= 0.5)
 			return false;
@@ -748,7 +768,7 @@ bool Camera_MFD::ConsumeKeyBuffered(DWORD key)
 		if (data->page == 1)
 			return false;
 
-		auto& camData = data->camMap.at(data->cam);
+		auto &camData = data->camMap.at(data->cam);
 
 		if (camData.userFOV + camData.fov >= 80)
 			return false;
@@ -760,7 +780,7 @@ bool Camera_MFD::ConsumeKeyBuffered(DWORD key)
 	}
 	case OAPI_KEY_J:
 	{
-		auto& userControl = data->camMap.at(data->cam).userControl;
+		auto &userControl = data->camMap.at(data->cam).userControl;
 
 		while (true)
 		{
@@ -794,7 +814,7 @@ bool Camera_MFD::ConsumeKeyBuffered(DWORD key)
 
 	case OAPI_KEY_C:
 	{
-		auto& nextCam = data->camMap.upper_bound(data->cam);
+		auto &nextCam = data->camMap.upper_bound(data->cam);
 
 		if (nextCam == data->camMap.end())
 			return false;
@@ -808,7 +828,7 @@ bool Camera_MFD::ConsumeKeyBuffered(DWORD key)
 	}
 	case OAPI_KEY_V:
 	{
-		auto& prevCam = data->camMap.lower_bound(data->cam);
+		auto &prevCam = data->camMap.lower_bound(data->cam);
 		prevCam--;
 
 		if (prevCam == data->camMap.end())
@@ -850,7 +870,7 @@ bool Camera_MFD::ConsumeKeyBuffered(DWORD key)
 
 void Camera_MFD::moveCamLeft()
 {
-	auto& camData = data->camMap.at(data->cam);
+	auto &camData = data->camMap.at(data->cam);
 
 	switch (data->adj) 
 	{
@@ -907,7 +927,7 @@ void Camera_MFD::moveCamLeft()
 
 void Camera_MFD::moveCamRight()
 {
-	auto& camData = data->camMap.at(data->cam);
+	auto &camData = data->camMap.at(data->cam);
 
 	switch (data->adj)
 	{
@@ -963,7 +983,7 @@ void Camera_MFD::moveCamRight()
 
 void Camera_MFD::moveCamUp()
 {
-	auto& camData = data->camMap.at(data->cam);
+	auto &camData = data->camMap.at(data->cam);
 
 	switch (data->adj) 
 	{
@@ -991,7 +1011,7 @@ void Camera_MFD::moveCamUp()
 
 void Camera_MFD::moveCamDown()
 {
-	auto& camData = data->camMap.at(data->cam);
+	auto &camData = data->camMap.at(data->cam);
 
 	switch (data->adj) 
 	{
@@ -1020,7 +1040,7 @@ void Camera_MFD::moveCamDown()
 
 void Camera_MFD::moveCamForward()
 {
-	auto& camData = data->camMap.at(data->cam);
+	auto &camData = data->camMap.at(data->cam);
 	
 	VECTOR3 dir = mul(camData.dir, _V(0, 0, 1)); normalise(dir);
 
@@ -1029,7 +1049,7 @@ void Camera_MFD::moveCamForward()
 
 void Camera_MFD::moveCamBackward()
 {
-	auto& camData = data->camMap.at(data->cam);
+	auto &camData = data->camMap.at(data->cam);
 
 	VECTOR3 dir = mul(camData.dir, _V(0, 0, 1)); normalise(dir);
 
@@ -1038,7 +1058,7 @@ void Camera_MFD::moveCamBackward()
 
 void Camera_MFD::resetCam()
 {
-	auto& camData = data->camMap.at(data->cam);
+	auto &camData = data->camMap.at(data->cam);
 
 	switch (data->adj) 
 	{
@@ -1118,7 +1138,7 @@ bool Camera_MFD::SetCameraData(int camera, CameraData cameraData)
 	if (data->camMap.find(camera) == data->camMap.end())
 		return false;
 
-	auto& camData = data->camMap.at(camera);
+	auto &camData = data->camMap.at(camera);
 
 	camData.label = cameraData.label;
 	camData.pos = cameraData.pos;
@@ -1168,7 +1188,7 @@ bool Camera_MFD::SetCameraData(int camera, CameraData cameraData)
 
 void Camera_MFD::setCamData(int cam, double pitchAngle, double yawAngle, double rotAngle)
 {
-	auto& camData = data->camMap.at(cam);
+	auto &camData = data->camMap.at(cam);
 
 	double yawSin = sin(yawAngle * RAD);
 	double yawCos = cos(yawAngle * RAD);
@@ -1223,7 +1243,7 @@ bool Camera_MFD::DeleteCamera(int camera)
 
 	data->camMap.erase(data->camMap.find(camera));
 
-	auto& prevCam = data->camMap.lower_bound(data->cam);
+	auto &prevCam = data->camMap.lower_bound(data->cam);
 	prevCam--;
 
 	if (prevCam == data->camMap.end())
@@ -1241,7 +1261,7 @@ bool Camera_MFD::DeleteCamera(int camera)
 
 void Camera_MFD::setCustomCamera() 
 {
-	auto& camData = data->camMap.at(data->cam);
+	auto &camData = data->camMap.at(data->cam);
 
 	VECTOR3 dir = mul(camData.dir, _V(0, 0, 1)); normalise(dir);
 	VECTOR3 rot = mul(camData.dir, _V(0, 1, 0)); normalise(rot);
